@@ -55,6 +55,7 @@ export default {
           const { status, msg } = res.data.meta
           if (status === 200) {
             const { token } = res.data.data
+            // const { token } = res.data.data
             // 登录成功给一个提示
             this.$message.success('登录成功 ')
             // 把token令牌存储在本地中
