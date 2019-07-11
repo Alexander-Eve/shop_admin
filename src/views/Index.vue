@@ -7,12 +7,13 @@
           <h1>电商后台管理系统</h1>
         </div>
         <div class="quit">
-          欢迎光临，xxx <a href="javascript:;">退出</a>
+          欢迎光临，xxx <a href="javascript:;" @click='quit'>退出</a>
         </div>
       </el-header>
       <el-container>
         <el-aside width="200px">
           <el-menu
+            router
             unique-opened
             default-active="2"
             class="el-menu-vertical-demo"
@@ -27,7 +28,7 @@
                 <span>用户管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-1">用户列表</el-menu-item>
+                <el-menu-item index="users">用户列表</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2">
@@ -50,7 +51,9 @@
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -64,6 +67,17 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    quit () {
+      this.$confirm('你确定要退出么?', '温馨提示', {
+        type: 'warning'
+      }).then(() => {
+        localStorage.removeItem('token')
+        this.$message.success('成功退出')
+        this.$router.push('/login')
+      }).catch(() => {
+        this.$message.warning('取消退出')
+      })
     }
   }
 }
@@ -107,6 +121,9 @@ export default {
   .el-submenu {
     width: 200px;
   }
+}
+.el-main {
+  background-color: #eaeef1;
 }
 
 </style>

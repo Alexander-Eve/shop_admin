@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -42,19 +41,12 @@ export default {
       this.$refs[formName].validate(valid => {
         if (!valid) return false
         console.log('校验通过')
-        // axios({
-        //   method:'post',
-        //   url:'http://localhost:8888/api/private/v1/login',
-        //   data:this.ruleForm
-        // }).then(res => {
-        //   console.log(res.data)
-        // })
-        axios.post('http://localhost:8888/api/private/v1/login', this.ruleForm).then(res => {
+        this.axios.post('login', this.ruleForm).then(res => {
           console.log(res.data)
           // 把res.data里面的数据解构出来
-          const { status, msg } = res.data.meta
+          const { status, msg } = res.meta
           if (status === 200) {
-            const { token } = res.data.data
+            const { token } = res.data
             // const { token } = res.data.data
             // 登录成功给一个提示
             this.$message.success('登录成功 ')
@@ -103,14 +95,5 @@ export default {
       margin-left: 100px;
     }
   }
-  // img {
-  //   position: absolute;
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  //   top: -100px;
-  //   width: 160px;
-  //   height: 160px;
-  //   border-radius: 80px;
-  // }
 }
 </style>
