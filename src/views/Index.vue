@@ -19,7 +19,6 @@
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
             <el-submenu index="1">
@@ -97,6 +96,7 @@ export default {
   .logo,
   .quit {
     width: 180px;
+    color: #ccc;
   }
   .logo {
     background: url('../assets/logo.png') no-repeat center center/contain ;
@@ -117,9 +117,14 @@ export default {
   }
 }
 .el-aside {
-  background-color: #545c64;
+  background: url('../assets/297580.jpg') no-repeat center center/cover;
   .el-submenu {
     width: 200px;
+  }
+  .el-menu-vertical-demo,
+  .el-menu {
+    background-color: black;
+    opacity: .7;
   }
 }
 .el-main {

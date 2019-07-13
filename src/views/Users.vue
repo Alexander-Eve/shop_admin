@@ -6,7 +6,7 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 搜索 -->
-    <div style="margin: 15px 0;">
+    <div style="margin: 15px 0;opacity:.7">
       <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
       </el-input>
@@ -15,7 +15,7 @@
 
     <!-- 表格 -->
     <template>
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%;">
         <el-table-column prop="username" label="姓名"> </el-table-column>
         <el-table-column prop="email" label="邮箱"> </el-table-column>
         <el-table-column prop="mobile" label="电话">
@@ -217,18 +217,22 @@ export default {
 <style lang="scss">
 .users {
   height: 100%;
-  background: url('../assets/292492.jpg') no-repeat center center/cover;
+  background: url('../assets/1000097.jpg') no-repeat center center/cover;
   .el-pagination {
-    background-color: #fff;
+    background-color: black;
+    opacity: .7;
   }
   .el-breadcrumb {
     line-height: 40px;
-    background-color: #fff;
+    opacity: .7;
     padding-left: 10px;
   }
   .input-with-select {
     width: 400px;
     margin-right: 30px;
+  }
+  .el-table {
+    opacity: .7;
   }
 }
 
