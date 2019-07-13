@@ -6,11 +6,11 @@
         <el-input type="text" v-model="ruleForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password"></el-input>
+        <el-input type="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -37,33 +37,29 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate(valid => {
-        if (!valid) return false
-        console.log('校验通过')
-        this.axios.post('login', this.ruleForm).then(res => {
-          console.log(res.data)
-          // 把res.data里面的数据解构出来
-          const { status, msg } = res.meta
-          if (status === 200) {
-            const { token } = res.data
-            // const { token } = res.data.data
-            // 登录成功给一个提示
-            this.$message.success('登录成功 ')
-            // 把token令牌存储在本地中
-            localStorage.setItem('token', token)
-            // 连式编程导航
-            // this.$router.push('/index')
-            this.$router.push({ name: 'index' })
-          } else {
-            // 登录失败提示
-            this.$message.error(msg)
-          }
-        })
-      })
+    resetForm () {
+      this.$refs.ruleForm.resetFields()
     },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
+    async submitForm () {
+      try {
+        await this.$refs.ruleForm.validate()
+        const { meta, data } = await this.axios.post('login', this.ruleForm)
+        // 把res.data里面的数据解构出来
+        if (meta.status === 200) {
+          // 登录成功给一个提示
+          this.$message.success('登录成功 ')
+          // 把token令牌存储在本地中
+          localStorage.setItem('token', data.token)
+          // 连式编程导航
+          // this.$router.push('/index')
+          this.$router.push({ name: 'index' })
+        } else {
+          // 登录失败提示
+          this.$message.error(meta.msg)
+        }
+      } catch (e) {
+        return false
+      }
     }
   }
 }

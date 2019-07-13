@@ -27,8 +27,6 @@ router.beforeEach((to, from, next) => {
   //  to   往哪儿去
   //  from 从哪儿来
   //  next() 想走就走，不想就留下 是一个回调函数
-  console.log('to', to)
-  console.log('from', from)
   const token = localStorage.getItem('token')
   if (to.path === '/login' || token) {
     next()
