@@ -30,7 +30,7 @@
           <template v-slot:default="{ row }">
             <el-button size='mini' type="primary" icon="el-icon-edit" circle @click="edit(row)"></el-button>
             <el-button size='mini' @click="del(row.id)" type="danger" icon="el-icon-delete" circle></el-button>
-            <el-button size='mini' type="success" icon="el-icon-check" round>分配角色</el-button>
+            <el-button size='mini' type="success" icon="el-icon-check" round @click=" distribute (row)">分配角色</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,6 +87,24 @@
         <el-button type="primary" @click="addInfo">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配角色 -->
+    <el-dialog title="分配角色" :visible.sync="isCategory">
+      <el-form :model="heroForm">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-tag type="info">{{ heroForm.username }}</el-tag>
+        </el-form-item>
+        <el-form-item label="角色列表" :label-width="formLabelWidth">
+          <el-select v-model="heroForm.region" placeholder="请选择角色">
+            <el-option label="角色一" value="shanghai"></el-option>
+            <el-option label="角色二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isCategory = false">取 消</el-button>
+        <el-button type="primary" @click="isCategory = false">确 定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -104,7 +122,9 @@ export default {
       isShow: false,
       form: {},
       formLabelWidth: '80px',
+      isCategory: false,
       addForm: {},
+      heroForm: {},
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -209,7 +229,13 @@ export default {
       this.$message.success('更新成功')
       // 重新渲染
       this.getQueryList()
+    },
+    distribute (hero) {
+      this.isCategory = true
+      console.log(hero)
+      this.heroForm.username = hero.username
     }
+
   }
 }
 </script>
