@@ -22,4 +22,12 @@ body,
 #app {
   height: 100%;
 }
+#app {
+  .el-breadcrumb {
+    line-height: 40px;
+    background-color: black;
+    opacity: .6;
+    padding-left: 10px;
+  }
+}
 </style>

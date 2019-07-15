@@ -118,6 +118,7 @@ export default {
   }
 }
 .el-aside {
+  height: 100%;
   background: black url('../assets/297580.jpg') no-repeat center center/cover;
   .el-submenu {
     width: 200px;
@@ -127,6 +128,7 @@ export default {
   }
 }
 .el-main {
+  height: 100%;
   background-color: #eaeef1;
 }
 

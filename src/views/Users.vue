@@ -248,12 +248,6 @@ export default {
     background-color: black;
     opacity: .6;
   }
-  .el-breadcrumb {
-    line-height: 40px;
-    background-color: black;
-    opacity: .6;
-    padding-left: 10px;
-  }
   .input-with-select {
     width: 400px;
     margin-right: 30px;
