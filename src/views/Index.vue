@@ -19,8 +19,7 @@
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            background-color="#545c64"
-            text-color="#fff"
+            text-color="#000"
             active-text-color="#ffd04b">
             <el-submenu index="1">
               <template slot="title">
@@ -37,7 +36,8 @@
                 <span>权限管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-3">用户列表</el-menu-item>
+                <el-menu-item index="roles">角色列表</el-menu-item>
+                <el-menu-item index="rights">权限列表</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
@@ -93,7 +93,7 @@ export default {
 .el-header {
   line-height: 60px;
   display: flex;
-  background: url('../assets/1000113_300.jpg') no-repeat center/cover;
+  background: url('../assets/1000097.jpg') no-repeat center/cover;
   .logo,
   .quit {
     width: 180px;
@@ -102,6 +102,7 @@ export default {
     background: url('../assets/logo.png') no-repeat center center/contain ;
   }
   .quit {
+    color: #ddd;
     a {
       color: peru;
       font-weight: 550;
@@ -117,9 +118,12 @@ export default {
   }
 }
 .el-aside {
-  background-color: #545c64;
+  background: black url('../assets/297580.jpg') no-repeat center center/cover;
   .el-submenu {
     width: 200px;
+  }
+  .el-menu {
+    background-color: transparent;
   }
 }
 .el-main {

@@ -6,7 +6,7 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 搜索 -->
-    <div style="margin: 15px 0;">
+    <div style="margin: 15px 0;" class="search">
       <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
       </el-input>
@@ -243,18 +243,30 @@ export default {
 <style lang="scss">
 .users {
   height: 100%;
-  background: url('../assets/292492.jpg') no-repeat center center/cover;
+  background:black url('../assets/303536.jpg') no-repeat center center/cover;
   .el-pagination {
-    background-color: #fff;
+    background-color: black;
+    opacity: .6;
   }
   .el-breadcrumb {
     line-height: 40px;
-    background-color: #fff;
+    background-color: black;
+    opacity: .6;
     padding-left: 10px;
   }
   .input-with-select {
     width: 400px;
     margin-right: 30px;
+  }
+  .el-table,
+  .el-table tr,
+  .el-table th {
+    background-color: black;
+    opacity: .6;
+  }
+  .search {
+    background-color: black;
+    opacity: .5;
   }
 }
 
