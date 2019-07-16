@@ -243,7 +243,7 @@ export default {
 <style lang="scss">
 .users {
   height: 100%;
-  background:black url('../assets/303536.jpg') no-repeat center center/cover;
+  background:black url('../../assets/303536.jpg') no-repeat center center/cover;
   .el-pagination {
     background-color: black;
     opacity: .6;

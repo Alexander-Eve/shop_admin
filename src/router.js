@@ -1,11 +1,11 @@
 import Vue from 'vue'
+import axios from 'axios'
 import VueRouter from 'vue-router'
 import Login from './views/Login.vue'
 import Index from './views/Index.vue'
-import Users from './views/Users.vue'
-import axios from 'axios'
-import Rights from './views/Rights.vue'
-import Roles from './views/Roles.vue'
+import Users from './views/users/Users.vue'
+import Rights from './views/rights/Rights.vue'
+import Roles from './views/rights/Roles.vue'
 
 Vue.use(VueRouter)
 

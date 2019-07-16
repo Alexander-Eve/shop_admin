@@ -231,7 +231,7 @@ export default {
     margin-right: 5px;
   }
   .edit {
-    background: url('../assets/325685_300.jpg') no-repeat center center/cover;
+    background: url('../../assets/325685_300.jpg') no-repeat center center/cover;
     float: right;
     margin-top: 10px;
     color: transparent;
