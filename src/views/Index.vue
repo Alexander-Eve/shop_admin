@@ -97,6 +97,7 @@ export default {
   .logo,
   .quit {
     width: 180px;
+    color: #ccc;
   }
   .logo {
     background: url('../assets/logo.png') no-repeat center center/contain ;
