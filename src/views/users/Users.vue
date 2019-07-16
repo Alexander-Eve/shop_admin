@@ -29,7 +29,7 @@
         <el-table-column label="操作">
           <template v-slot:default="{ row }">
             <el-button size='mini' type="primary" icon="el-icon-edit" circle @click="edit(row)"></el-button>
-            <el-button size='mini' @click="del(row.id)" type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button size='mini' @click="delUsers(row.id,$event)" type="danger" icon="el-icon-delete" circle></el-button>
             <el-button size='mini' type="success" icon="el-icon-check" round @click=" distribute (row)">分配角色</el-button>
           </template>
         </el-table-column>
@@ -179,8 +179,11 @@ export default {
       if (data.mg_state) return this.$message.success('启用成功')
       this.$message.error('禁用成功')
     },
-    async del (id) {
+    async delUsers (id, e) {
       try {
+        await this.$confirm('是否确认删除该用户', '温馨提示', {
+          type: 'warning'
+        })
         const { meta } = await this.axios.delete(`users/${id}`)
         if (meta.status === 200) {
           this.$message.success('成功删除该用户')
@@ -189,8 +192,13 @@ export default {
           }
           this.getQueryList()
         }
-      } catch (e) {
-        this.$message.error('删除失败')
+      } catch {
+        let current = e.target
+        if (e.target.nodeName === 'I') {
+          current = e.target.parentNode
+        }
+        current.blur()
+        this.$message('删除失败')
       }
     },
     async addInfo () {
@@ -232,7 +240,6 @@ export default {
     },
     distribute (hero) {
       this.isCategory = true
-      console.log(hero)
       this.heroForm.username = hero.username
     }
 

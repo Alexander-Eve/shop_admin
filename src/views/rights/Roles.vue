@@ -33,13 +33,13 @@
       <el-table-column prop="roleDesc" label="描述"></el-table-column>
       <el-table-column label="操作">
         <template v-slot:default="{ row }">
-          <el-button type="primary" icon="el-icon-edit"  plain circle size="small" @click="editRight(row)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" plain circle size="small" @click="delRight(row.id)"></el-button>
+          <el-button type="primary" icon="el-icon-edit"  plain circle size="small" @click="editShow(row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" plain circle size="small" @click="delRight(row.id, $event)"></el-button>
           <el-button type="success" icon="el-icon-check" plain round size="small" @click="assignRight(row)">分配权限</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button class="edit" @click="addShow = true">添加角色</el-button>
+    <el-button class="edit" @click="addShow">添加角色</el-button>
     <!-- 分配框 -->
     <el-dialog
       title="角色授权"
@@ -58,9 +58,9 @@
         <el-button type="primary" @click="cofirmation()">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 修改框 -->
+    <!-- 修改添加共用框 -->
     <el-dialog
-      title="编辑角色"
+      :title="title"
       :visible.sync="isEditing"
       width="40%">
       <el-form label-width="80px" :model= "editData" ref="editData">
@@ -69,7 +69,7 @@
         ]">
           <el-input v-model="editData.roleName"></el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="roleDesc">
+        <el-form-item label="角色描述" prop="roleDesc">
           <el-input v-model="editData.roleDesc" @keyup.enter.native="define"></el-input>
         </el-form-item>
       </el-form>
@@ -78,8 +78,8 @@
         <el-button type="primary" @click="define">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 添加框 -->
-    <el-dialog
+    <!-- 添加框两个对话框 -->
+    <!-- <el-dialog
       title="添加角色"
       :visible.sync="addShow"
       width="40%">
@@ -97,7 +97,7 @@
         <el-button @click="addShow = false">取 消</el-button>
         <el-button type="primary" @click="addRight">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -118,23 +118,22 @@ export default {
         roleDesc: '',
         roleName: '',
         id: ''
-      },
-      addData: {
-        roleName: '',
-        roleDesc: ''
-      },
-      addShow: false
+      }
     }
   },
   created () {
     this.getRolesList()
+  },
+  computed: {
+    title () {
+      return this.editData.id ? '编辑角色' : '添加角色'
+    }
   },
   methods: {
     async getRolesList () {
       const { meta, data } = await this.axios.get('roles')
       if (meta.status === 200) {
         this.roleData = data
-        console.log(data)
       }
     },
     async assignRight (row) {
@@ -173,45 +172,55 @@ export default {
         this.$message.success(meta.msg)
       }
     },
-    async delRight (id) {
-      const { meta } = await this.axios.delete(`roles/${id}`)
-      console.log(meta)
-      if (meta.status === 200) {
-        this.$message.success(meta.msg)
-        this.getRolesList()
+    async delRight (id, e) {
+      try {
+        await this.$confirm('是否确认删除该角色?', '温馨提示', {
+          type: 'warning'
+        })
+        const { meta } = await this.axios.delete(`roles/${id}`)
+        if (meta.status === 200) {
+          this.$message.success(meta.msg)
+          this.getRolesList()
+        }
+      } catch {
+        let current = e.target
+        if (e.target.nodeName === 'I') {
+          current = e.target.parentNode
+        }
+        current.blur()
+        this.$message('取消删除')
       }
     },
-    editRight (row) {
+    editShow (row) {
       this.isEditing = true
       // 数据回显
       this.editData.roleDesc = row.roleDesc
       this.editData.roleName = row.roleName
       this.editData.id = row.id
     },
+    addShow () {
+      this.isEditing = true
+      // 对话框重置
+      this.editData.roleDesc = ''
+      this.editData.roleName = ''
+      this.editData.id = ''
+    },
     async define () {
       try {
         await this.$refs.editData.validate()
-        const { meta } = await this.axios.put(`roles/${this.editData.id}`, this.editData)
-        if (meta.status === 200) {
-          this.$message.success('更新成功')
-        }
-        this.isEditing = false
-      } catch (e) {
-        this.$message.error('请输入角色名')
-      }
-    },
-    async addRight () {
-      try {
-        await this.$refs.addData.validate()
-        const { meta } = await this.axios.post('roles', this.addData)
-        console.log(meta)
-        if (meta.status === 201) {
+        const { id } = this.editData
+        let method = id ? `put` : `post`
+        let url = id ? `roles/${id}` : `roles`
+        let code = id ? 200 : 201
+        const { meta } = await this.axios[method](url, this.editData)
+        if (meta.status === code) {
           this.$message.success(meta.msg)
-          this.addShow = false
+          this.isEditing = false
           this.getRolesList()
-          this.$refs.addData.resetFields()
+        } else {
+          this.$message.error(meta.msg)
         }
-      } catch (e) {
+      } catch {
         this.$message.error('请输入角色名')
       }
     }
