@@ -28,6 +28,7 @@ body,
     background-color: black;
     opacity: .6;
     padding-left: 10px;
+    border-radius: 5px;
   }
 }
 </style>

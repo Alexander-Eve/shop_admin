@@ -59,7 +59,6 @@ export default {
     const { meta, data } = await this.axios.get('menus')
     if (meta.status === 200) {
       this.indexList = data
-      console.log(data)
     }
   },
   methods: {
@@ -132,7 +131,7 @@ export default {
 }
 .el-main {
   height: 100%;
-  background-color: #eaeef1;
+  background: url('../assets/320290.jpg') no-repeat center center/cover;
 }
 
 </style>
