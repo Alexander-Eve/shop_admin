@@ -30,7 +30,7 @@
           <template v-slot:default="{ row }">
             <el-button size='mini' type="primary" icon="el-icon-edit" circle @click="edit(row)"></el-button>
             <el-button size='mini' @click="delUsers(row.id,$event)" type="danger" icon="el-icon-delete" circle></el-button>
-            <el-button size='mini' type="success" icon="el-icon-check" round @click=" distribute (row)">分配角色</el-button>
+            <el-button size='mini' type="success" icon="el-icon-check" round @click="distribute(row)">分配角色</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,20 +89,24 @@
     </el-dialog>
     <!-- 分配角色 -->
     <el-dialog title="分配角色" :visible.sync="isCategory">
-      <el-form :model="heroForm">
+      <el-form :model="assignForm">
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-tag type="info">{{ heroForm.username }}</el-tag>
+          <el-tag type="info">{{ assignForm.username }}</el-tag>
         </el-form-item>
         <el-form-item label="角色列表" :label-width="formLabelWidth">
-          <el-select v-model="heroForm.region" placeholder="请选择角色">
-            <el-option label="角色一" value="shanghai"></el-option>
-            <el-option label="角色二" value="beijing"></el-option>
+          <el-select v-model="assignForm.rid" placeholder="请选择">
+            <el-option
+              v-for="item in heroForm"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id">
+            </el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="isCategory = false">取 消</el-button>
-        <el-button type="primary" @click="isCategory = false">确 定</el-button>
+        <el-button type="primary" @click="assignRight">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -124,7 +128,8 @@ export default {
       formLabelWidth: '80px',
       isCategory: false,
       addForm: {},
-      heroForm: {},
+      heroForm: [],
+      assignForm: {},
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -238,11 +243,33 @@ export default {
       // 重新渲染
       this.getQueryList()
     },
-    distribute (hero) {
+    async distribute (row) {
       this.isCategory = true
-      this.heroForm.username = hero.username
+      // 回显用户名名和id
+      this.assignForm.username = row.username
+      this.assignForm.id = row.id
+      // 发送ajax获取下拉框的数据回显
+      const { meta, data } = await this.axios.get(`roles`)
+      if (meta.status === 200) {
+        this.heroForm = data
+      }
+      //  通过ajax让下拉框的数据获取rid
+      const res = await this.axios.get(`users/${row.id}`)
+      console.log(res)
+      this.assignForm.rid = res.data.rid === -1 ? '' : res.data.rid
+    },
+    async assignRight () {
+      if (!this.assignForm.rid) {
+        return this.$message.error('请选择角色')
+      }
+      const { meta } = await this.axios.put(`users/${this.assignForm.id}/role`, this.assignForm)
+      if (meta.status === 200) {
+        this.$message.success(meta.msg)
+        this.isCategory = false
+      } else {
+        this.$message.error(meta.msg)
+      }
     }
-
   }
 }
 </script>
