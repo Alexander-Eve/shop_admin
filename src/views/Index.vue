@@ -15,40 +15,24 @@
           <el-menu
             router
             unique-opened
-            default-active="2"
+            :default-active="path"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
             text-color="#000"
             active-text-color="#ffd04b">
-            <el-submenu index="1">
+            <!-- index 是跳转路径 -->
+            <el-submenu v-for="menu in indexList" :key="menu.id" :index="menu.path">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>用户管理</span>
+                <span>{{ menu.authName }}</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="users">用户列表</el-menu-item>
+                <el-menu-item :index="item.path" v-for="item in menu.children" :key="item.id">
+                  <i class="el-icon-menu"></i>{{ item.authName }}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>权限管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="roles">角色列表</el-menu-item>
-                <el-menu-item index="rights">权限列表</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>商品管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="1-2">用户列表</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+
           </el-menu>
         </el-aside>
         <el-main>
@@ -61,6 +45,23 @@
 
 <script>
 export default {
+  data () {
+    return {
+      indexList: []
+    }
+  },
+  computed: {
+    path () {
+      return this.$route.path.slice(1)
+    }
+  },
+  async created () {
+    const { meta, data } = await this.axios.get('menus')
+    if (meta.status === 200) {
+      this.indexList = data
+      console.log(data)
+    }
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
@@ -68,16 +69,17 @@ export default {
     handleClose (key, keyPath) {
       console.log(key, keyPath)
     },
-    quit () {
-      this.$confirm('你确定要退出么?', '温馨提示', {
-        type: 'warning'
-      }).then(() => {
+    async quit () {
+      try {
+        await this.$confirm('你确定要退出么?', '温馨提示', {
+          type: 'waring'
+        })
         localStorage.removeItem('token')
         this.$message.success('成功退出')
         this.$router.push('/login')
-      }).catch(() => {
+      } catch {
         this.$message.warning('取消退出')
-      })
+      }
     }
   }
 }
