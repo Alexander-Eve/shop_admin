@@ -17,8 +17,6 @@
             unique-opened
             :default-active="path"
             class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
             text-color="#000"
             active-text-color="#ffd04b">
             <!-- index 是跳转路径 -->
@@ -52,7 +50,7 @@ export default {
   },
   computed: {
     path () {
-      return this.$route.path.slice(1)
+      return this.$route.path.slice(1).split('-')[0]
     }
   },
   async created () {
@@ -62,12 +60,6 @@ export default {
     }
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
     async quit () {
       try {
         await this.$confirm('你确定要退出么?', '温馨提示', {
@@ -105,6 +97,7 @@ export default {
   }
   .quit {
     color: #ddd;
+    font-weight: 700;
     a {
       color: peru;
       font-weight: 550;
@@ -114,14 +107,14 @@ export default {
     flex: 1;
     h1 {
       font-size: 30px;
-      color: #596;
+      color: #f0f0f0;
       text-align: center;
     }
   }
 }
 .el-aside {
   height: 100%;
-  background: black url('../assets/297580.jpg') no-repeat center center/cover;
+  background: black url('../assets/timg.jpg') no-repeat center center/cover;
   .el-submenu {
     width: 200px;
   }
@@ -133,5 +126,4 @@ export default {
   height: 100%;
   background: url('../assets/320290.jpg') no-repeat center center/cover;
 }
-
 </style>

@@ -78,26 +78,6 @@
         <el-button type="primary" @click="define">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 添加框两个对话框 -->
-    <!-- <el-dialog
-      title="添加角色"
-      :visible.sync="addShow"
-      width="40%">
-      <el-form label-width="80px" :model= "addData" ref="addData">
-        <el-form-item label="角色名称" prop="roleName" :rules="[
-          { required: true, message: '请输入角色名', trigger: 'blur'}
-        ]">
-          <el-input v-model="addData.roleName"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="roleDesc">
-          <el-input v-model="addData.roleDesc"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addShow = false">取 消</el-button>
-        <el-button type="primary" @click="addRight">确 定</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 

@@ -8,6 +8,8 @@ import Rights from './views/rights/Rights.vue'
 import Roles from './views/rights/Roles.vue'
 import Categories from './views/product/Categories.vue'
 import Goods from './views/product/Goods.vue'
+import moment from 'moment'
+import GoodsAdd from './views/product/Add.vue'
 
 Vue.use(VueRouter)
 
@@ -25,10 +27,15 @@ const router = new VueRouter({
         { path: '/rights', component: Rights },
         { path: '/roles', component: Roles },
         { path: '/categories', component: Categories },
-        { path: '/goods', component: Goods }
+        { path: '/goods', component: Goods },
+        { path: '/goods-add', component: GoodsAdd }
       ]
     }
   ]
+})
+// 设置一个全局的过滤器
+Vue.filter('dataFilter', value => {
+  return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')
 })
 //  导航守卫全局守卫
 router.beforeEach((to, from, next) => {

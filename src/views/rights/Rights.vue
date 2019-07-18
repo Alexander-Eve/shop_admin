@@ -40,17 +40,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss">
 .rights {
   height: 100%;
-  background-color: #fff;
-  // overflow: hidden;
-  // background: url('../assets/318212.jpg') no-repeat center center/cover;
   .el-breadcrumb {
     color: white;
   }
- .el-table tr {
-
- }
 }
 </style>

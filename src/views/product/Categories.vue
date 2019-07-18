@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <el-button class="diy" @click="isShowAdd">添加分类</el-button>
     <!-- 表格 -->
-    <el-table :data="tableData"  style="width: 100%" row-key="cat_id">
+    <el-table :data="tableData"  style="width: 100%" row-key="cat_id"  v-loading="loading">
       <el-table-column prop="cat_name" label="分类名称"></el-table-column>
       <el-table-column label="是否有效">
         <template v-slot:default="{ row }">
@@ -62,15 +62,16 @@
         </el-form-item>
         <el-form-item label="父级名称">
           <el-cascader
-            v-model="addData.id"
-            :options="addList"
-            @change="handleChange">
+            clearable
+            v-model="value"
+            :options="options"
+            :props="props">
           </el-cascader>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="isShowDialog = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="addCate">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -90,8 +91,18 @@ export default {
         id: ''
       },
       isShowDialog: false,
-      addData: {},
-      addList: []
+      addData: {
+        cat_name: ''
+      },
+      loading: true,
+      options: [],
+      value: [],
+      props: {
+        label: 'cat_name',
+        value: 'cat_id',
+        children: 'children',
+        checkStrictly: true
+      }
     }
   },
   created () {
@@ -110,6 +121,7 @@ export default {
       this.getCategoriesList()
     },
     async getCategoriesList () {
+      this.loading = true
       const { meta, data } = await this.axios.get('categories', {
         params: {
           pagenum: this.pagenum,
@@ -120,6 +132,8 @@ export default {
         this.tableData = data.result
         this.total = data.total
       }
+
+      this.loading = false
     },
     async delCategory (row, e) {
       try {
@@ -159,11 +173,28 @@ export default {
         this.$message.error(meta.msg)
       }
     },
-    isShowAdd () {
+    async isShowAdd () {
       this.isShowDialog = true
+      this.addData.cat_name = ''
+      this.value = []
+      const { meta, data } = await this.axios.get(`categories/?type=2`)
+      if (meta.status === 200) {
+        this.options = data
+      } else {
+        this.$message.error(meta.msg)
+      }
     },
-    handleChange (value) {
-      console.log(value)
+    async addCate () {
+      if (!this.addData.cat_name) return this.$message.error('请输入分类名称')
+      this.addData.cat_pid = this.value.slice(-1)[0] || 0
+      this.addData.cat_level = this.value.length
+      const { meta } = await this.axios.post('categories', this.addData)
+      if (meta.status === 201) {
+        console.log(meta)
+        this.isShowDialog = false
+        this.getCategoriesList()
+        this.$message.success(meta.msg)
+      }
     }
   }
 }
@@ -183,13 +214,6 @@ export default {
     &:hover {
       color: transparent;
     }
-  }
-  .el-table,
-  .el-table th,
-  .el-table tr {
-    background-color: black;
-    opacity: .7;
-    color: white;
   }
   .el-pagination {
     background-color: black;

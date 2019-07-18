@@ -14,8 +14,7 @@
     </div>
 
     <!-- 表格 -->
-    <template>
-      <el-table :data="tableData" style="width: 100%;">
+      <el-table :data="tableData" style="width: 100%;" v-loading="loading">
         <el-table-column prop="username" label="姓名"> </el-table-column>
         <el-table-column prop="email" label="邮箱"> </el-table-column>
         <el-table-column prop="mobile" label="电话">
@@ -34,7 +33,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </template>
 
     <!-- 分页 -->
     <el-pagination
@@ -117,6 +115,7 @@
 export default {
   data () {
     return {
+      loading: true,
       tableData: [],
       query: '',
       pagenum: 1,
@@ -153,6 +152,7 @@ export default {
   },
   methods: {
     async getQueryList () {
+      this.loading = true
       const { meta, data } = await this.axios.get('users', {
         params: {
           query: this.query,
@@ -164,6 +164,7 @@ export default {
         this.tableData = data.users
         this.total = data.total
       }
+      this.loading = false
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -285,12 +286,6 @@ export default {
   .input-with-select {
     width: 400px;
     margin-right: 30px;
-  }
-  .el-table,
-  .el-table tr,
-  .el-table th {
-    background-color: black;
-    opacity: .6;
   }
   .search {
     background-color: black;

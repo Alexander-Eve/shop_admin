@@ -30,5 +30,23 @@ body,
     padding-left: 10px;
     border-radius: 5px;
   }
+  .diy {
+  margin: 10px 0;
+  background: url('./assets/325473.jpg') no-repeat center center/cover;
+  color: transparent;
+  font-size: 40px;
+  opacity: .6;
+  &:active,
+  &:focus,
+  &:hover {
+    color: transparent;
+  }
+  }
+  .el-table,
+  .el-table th,
+  .el-table tr {
+    background-color: black;
+    opacity: .7;
+  }
 }
 </style>
